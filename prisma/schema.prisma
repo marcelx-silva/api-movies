@@ -10,3 +10,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Movie{
+  id  Int @id @default(autoincrement())
+  uuid String @db.Uuid @unique
+  title String @db.VarChar(40) @unique
+  synopsis String @db.VarChar(200)
+  language String @db.VarChar(30)
+  year String @db.VarChar(4)
+  genres String[] @db.VarChar(15)
+}
+
