@@ -23,6 +23,6 @@ model Movie{
 model Genre{
   id Int @id @default(autoincrement())
   uuid String @db.Uuid @unique
-  name String @db.VarChar(35)
+  name String @db.VarChar(35) @unique
 }
 
