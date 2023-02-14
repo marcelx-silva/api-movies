@@ -1,23 +1,4 @@
-import {randomUUID} from "crypto";
-
-
-class Genre{
-    private readonly id:string;
-    private readonly name:string;
-
-    constructor(name:string) {
-        this.id = randomUUID();
-        this.name = name;
-    }
-
-    getId(){
-        return this.id;
-    }
-
-    getName(){
-        return this.name;
-    }
-}
+import {Genre} from "../../model/Genre";
 
 describe("Genre Model",()=>{
 
