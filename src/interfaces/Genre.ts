@@ -1,4 +1,4 @@
-export interface GenreUpdate{
+export interface Genre{
     uuid:string;
     name:string;
 }
