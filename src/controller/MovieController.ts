@@ -14,27 +14,27 @@ export class MovieController{
 
     async findById(request:Request,response:Response):Promise<Response>{
         const uuid:string = <string>request.params.uuid;
-        const movie = await movieService.findById(uuid);
-        return response.json(movie);
+        const movieFound = await movieService.findById(uuid);
+        return response.json(movieFound);
     }
 
     async create(request:Request,response:Response){
         const {title,synopsis,language,year,genres} = request.body;
-        const movie = await movieService.create(new Movie(title,synopsis,year,language,genres));
-        return response.status(200).json(movie);
+        const movieCreated = await movieService.create(new Movie(title,synopsis,year,language,genres));
+        return response.status(200).json(movieCreated);
     }
 
     async deleteById(request:Request,response:Response){
         const uuid:string = <string>request.params.uuid;
-        const allMovies = await movieService.deleteById(uuid);
-        return response.status(200).json(allMovies)
+        const movieDeleted = await movieService.deleteById(uuid);
+        return response.status(200).json(movieDeleted)
     }
 
     async updateById(request:Request,response:Response){
         const uuid:string = request.params.uuid
         const {title,synopsis,language,year,genres} = request.body;
-        const allMovies = await movieService.updateById({uuid,title,synopsis,language,year,genres});
-        return response.status(200).json(allMovies)
+        const movieUpdated = await movieService.updateById({uuid,title,synopsis,language,year,genres});
+        return response.status(200).json(movieUpdated)
     }
 
     async findByTitle(request:Request, response:Response) {
