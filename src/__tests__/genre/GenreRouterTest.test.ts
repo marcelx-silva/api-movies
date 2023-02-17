@@ -3,7 +3,6 @@ import {prisma} from "../../database/prisma";
 import {Genre} from "../../model/Genre";
 import {app} from "../../app";
 import {randomUUID} from "crypto";
-import {exec} from "child_process";
 
 describe('Genre Router Tests',  () =>{
 
