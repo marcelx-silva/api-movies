@@ -5,9 +5,9 @@ export class Movie{
     private readonly synopsis:string;
     private readonly year:string;
     private readonly language:string;
-    private genres:string[] | undefined;
+    private genres:string[];
 
-    public constructor(title:string,synopsis:string,year:string,language:string,genres?:string[]) {
+    public constructor(title:string,synopsis:string,year:string,language:string,genres:string[]) {
         this.id = uuid()
         this.title = title;
         this.synopsis = synopsis;
