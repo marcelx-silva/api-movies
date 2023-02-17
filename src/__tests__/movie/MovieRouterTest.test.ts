@@ -2,26 +2,21 @@ import supertest from "supertest";
 import {app} from "../../app";
 import {prisma} from "../../database/prisma";
 import {Movie} from "../../model/Movie";
+import {MovieService} from "../../service/MovieService";
 
 describe("Movie Router",  ()=>{
 
-    const movieTest:Movie = new Movie("title","synopsis","2015","language",["genre1,genre2"]);
+    const movieTest:Movie = new Movie("title","synopsis","2015","language",[]);
 
     beforeEach(async ()=>{
-        await prisma.$transaction([prisma.movie.create({
-            data: {
-                title: movieTest.getTitle(),
-                synopsis: movieTest.getSynopsis(),
-                language: movieTest.getLanguage(),
-                year: movieTest.getYear(),
-                genres: movieTest.getGenres(),
-                uuid: movieTest.getId(),
-            }
-        })])
+        await prisma.movie.deleteMany();
+        const movieService = new MovieService();
+        await movieService.create(movieTest);
+
     })
 
     afterEach(async ()=> {
-        await prisma.$transaction([prisma.movie.deleteMany()])
+        await prisma.$transaction([prisma.movieGenre.deleteMany(),prisma.movie.deleteMany()])
     })
 
 
@@ -45,7 +40,7 @@ describe("Movie Router",  ()=>{
     it('should create a movie', async function () {
         const response = await supertest(app)
             .post('/movie')
-            .send({title:"title2",synopsis:"synopsis",language:"language",year:"2015",genres:["carros","aventura"]})
+            .send({title:"title2",synopsis:"synopsis",language:"language",year:"2015",genres:[]})
 
         expect(response.statusCode).toBe(200);
         expect(response.statusType).toBe(2);
@@ -54,7 +49,7 @@ describe("Movie Router",  ()=>{
     it('should update a movie by id', async function () {
         const response = await supertest(app)
             .put(`/movie/${movieTest.getId()}`)
-            .send({title:"title",synopsis:"synopsis",language:"language",year:"2015",genres:["carros","terror"]})
+            .send({title:"title",synopsis:"synopsis",language:"language",year:"2015",genres:[]})
         expect(response.statusType).toBe(2);
 
     });
