@@ -36,3 +36,12 @@ model MovieGenre{
 
   @@id([movieName,genreName])
 }
+
+model User{
+  id Int @id @default(autoincrement())
+  uuid String @db.Uuid @unique
+  fullName String @db.VarChar(50)
+  username String @db.VarChar(25) @unique
+  email String @db.VarChar(60) @unique
+  password String @db.VarChar(30)
+}
