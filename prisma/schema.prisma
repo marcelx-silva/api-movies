@@ -17,12 +17,22 @@ model Movie{
   synopsis String @db.VarChar(200)
   language String @db.VarChar(30)
   year String @db.VarChar(4)
-  genres String[] @db.VarChar(15)
+  genres MovieGenre[]
 }
 
 model Genre{
   id Int @id @default(autoincrement())
   uuid String @db.Uuid @unique
   name String @db.VarChar(35) @unique
+  movies MovieGenre[]
 }
 
+model MovieGenre{
+  movieName String
+  movie Movie @relation(fields: [movieName],references: [title])
+
+  genreName String
+  genre Genre @relation(fields: [genreName],references: [name])
+
+  @@id([movieName,genreName])
+}
