@@ -51,8 +51,15 @@ export class MovieService{
                 synopsis: movie.getSynopsis(),
                 language: movie.getLanguage(),
                 year: movie.getYear(),
-                genres: movie.getGenres(),
                 uuid: movie.getId(),
+                genres: {
+                    connectOrCreate: movie.getGenres()?.filter( g => g!=null).map(genre =>{
+                        return{
+                            where:{ movieName_genreName:{movieName:movie.getYear(),genreName:genre}},
+                            create:{genreName:genre}
+                        }
+                    })
+                }
             }
         });
 
@@ -82,7 +89,14 @@ export class MovieService{
                 synopsis: movie.synopsis,
                 language: movie.language,
                 year: movie.year,
-                genres: movie.genres,
+                genres: {
+                    connectOrCreate: movie.genres.filter( g => g!=null).map(genre =>{
+                        return{
+                            where:{ movieName_genreName:{movieName:movie.year,genreName:genre}},
+                            create:{genreName:genre}
+                        }
+                    })
+                }
             }
         })
 
