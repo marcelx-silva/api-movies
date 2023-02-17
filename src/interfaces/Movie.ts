@@ -4,5 +4,5 @@ export interface MovieUpdate {
     synopsis: string,
     language: string,
     year: string,
-    genres: string,
+    genres: string[],
 }
