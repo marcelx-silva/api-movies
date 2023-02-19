@@ -1,15 +1,16 @@
 import {Router, Response, NextFunction, Request} from "express";
 import {GenreController} from "../controller/GenreController";
+import {AuthUserToken} from "../middleware/AuthUserToken";
 
 export const genreRoutes = Router();
 
 const genreController:GenreController = new GenreController();
+const authUserToken:AuthUserToken = new AuthUserToken();
 
 genreRoutes.route('/genre')
     .all((req:Request,res:Response,next:NextFunction)=>{
-        res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        next();
+        authUserToken.authenticateToken(req,res,next);
     })
     .get((req:Request,res:Response)=>{
         return genreController.findAll(req, res);
@@ -20,12 +21,10 @@ genreRoutes.route('/genre')
 
 genreRoutes.route('/genre/:uuid')
     .all((req:Request,res:Response,next:NextFunction)=>{
-        res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        next();
+        authUserToken.authenticateToken(req,res,next);
     })
     .get((req:Request,res:Response)=>{
-        console.log(req.params)
         return genreController.findById(req, res);
     })
     .delete((req:Request,res:Response)=>{
@@ -37,9 +36,8 @@ genreRoutes.route('/genre/:uuid')
 
 genreRoutes.route('/genre/name/:name')
     .all((req:Request,res:Response,next:NextFunction)=>{
-        res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        next();
+        authUserToken.authenticateToken(req,res,next);
     })
     .get((req:Request,res:Response)=>{
         return genreController.findByName(req, res);

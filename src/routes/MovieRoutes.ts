@@ -1,16 +1,16 @@
 import {Router, Request, Response, NextFunction} from 'express';
 import {MovieController} from "../controller/MovieController";
+import {AuthUserToken} from "../middleware/AuthUserToken";
 
 
 export const movieRoutes = Router();
 
 const movieController:MovieController = new MovieController();
-
+const authUserToken:AuthUserToken = new AuthUserToken();
 movieRoutes.route('/movie')
     .all((req:Request,res:Response,next:NextFunction)=>{
-        res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        next();
+        authUserToken.authenticateToken(req,res,next);
     })
     .get((req:Request,res:Response)=>{
         return movieController.findAll(req, res);
@@ -21,9 +21,8 @@ movieRoutes.route('/movie')
 
 movieRoutes.route('/movie/:uuid')
     .all((req:Request,res:Response,next:NextFunction)=>{
-        res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        next();
+        authUserToken.authenticateToken(req,res,next);
     })
     .get((req:Request,res:Response)=>{
         return movieController.findById(req, res);
@@ -37,9 +36,8 @@ movieRoutes.route('/movie/:uuid')
 
 movieRoutes.route('/movie/title/:title')
     .all((req:Request,res:Response,next:NextFunction)=>{
-        res.statusCode = 200;
         res.setHeader('Content-Type','application/json');
-        next();
+        authUserToken.authenticateToken(req,res,next);
     })
     .get((req:Request,res:Response)=>{
         return movieController.findByTitle(req, res);
