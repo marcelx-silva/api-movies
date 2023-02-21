@@ -8,14 +8,20 @@ export class MovieService{
         const movies =  await prisma.movie.findMany({
             take:limit,
             skip:page,
+            orderBy:{
+                title: `asc`
+            },
             select:{
+                uuid: true,
                 title: true,
                 synopsis: true,
                 language: true,
                 year: true,
-                genres: true,
-                uuid: true,
-                id:false
+                genres:{
+                    select:{
+                        genreName:true,
+                    }
+                }
             }
         });
 
@@ -33,7 +39,11 @@ export class MovieService{
                 synopsis: true,
                 language: true,
                 year: true,
-                genres: true,
+                genres:{
+                    select:{
+                        genreName:true,
+                    }
+                },
                 id: false
             }
         });
@@ -117,7 +127,11 @@ export class MovieService{
                 synopsis: true,
                 language: true,
                 year: true,
-                genres: true,
+                genres:{
+                    select:{
+                        genreName:true,
+                    }
+                },
                 id: false
             }
         })
