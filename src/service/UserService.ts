@@ -2,7 +2,9 @@ import {User} from "../model/User";
 import {prisma} from "../database/prisma";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
+import {AuthToken} from "../model/AuthToken";
 
+const tokenDurationTimeInSeconds:number = 1800; // 30 minutes
 export class UserService{
 
     async create(user: User) {
@@ -22,13 +24,11 @@ export class UserService{
     }
 
     async login(userLogin:{ password: string; username: string }) {
-        console.log(userLogin.username)
         const user = await prisma.user.findUnique({
             where:{
                 username:userLogin.username
             }
         })
-        console.log(user)
         if (!user)
             throw new Error(`User does not exists`);
 
@@ -38,10 +38,9 @@ export class UserService{
             throw new Error(`User does not exists`);
 
         const token = jwt.sign({ _id: user.id?.toString(), name: user.username }, `secret`, {
-            expiresIn: '2 days',
+            expiresIn: tokenDurationTimeInSeconds,
         });
-        console.log(token)
-        return token;
 
+        return new AuthToken(token,tokenDurationTimeInSeconds);
     }
 }
