@@ -1,16 +1,16 @@
-import {v4 as uuid} from "uuid";
+import {v4 as uuidv4} from "uuid";
 
 export class Genre{
-    private readonly id:string;
+    private readonly uuid:string;
     private readonly name:string;
 
-    constructor(name:string) {
-        this.id = uuid();
+    constructor(name:string,uuid?:string) {
+        this.uuid = uuid || uuidv4();
         this.name = name;
     }
 
     getId(){
-        return this.id;
+        return this.uuid;
     }
 
     getName(){
