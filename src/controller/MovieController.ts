@@ -39,7 +39,7 @@ export class MovieController{
 
     async findByTitle(request:Request, response:Response) {
         const title:string = <string>request.params.title;
-        const allMovies = await movieService.findByTitle(title);
-        return response.status(200).json(allMovies)
+        const movieFound = await movieService.findByTitle(title);
+        return response.status(200).json(movieFound)
     }
 }

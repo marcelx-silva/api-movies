@@ -33,7 +33,6 @@ export class UserService{
             throw new Error(`User does not exists`);
 
         const isMatch = bcrypt.compare(userLogin.password,user.password)
-        console.log(isMatch)
         if (!isMatch)
             throw new Error(`User does not exists`);
 

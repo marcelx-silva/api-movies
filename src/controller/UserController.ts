@@ -6,7 +6,6 @@ export class UserController{
     userService:UserService = new UserService();
     async register(request:Request,response:Response){
         const {fullName,username,email,password} = request.body
-        console.log('Request Body:\n'+request.body)
         const userRegistered = await this.userService.create(new User(fullName,email,username,password))
         return response.status(201).json(userRegistered);
     }
