@@ -2,6 +2,7 @@ import {prisma} from "../database/prisma";
 import {Movie} from "../model/Movie";
 import {MovieUpdate} from "../interfaces/Movie";
 import {MovieNotFound} from "../errors/MovieNotFound";
+import {MovieMapper} from "../model/mapper/MovieMapper";
 
 export class MovieService{
     async findAll(page:number,limit:number){
@@ -25,7 +26,7 @@ export class MovieService{
             }
         });
 
-        return movies;
+        return movies.map(movie => MovieMapper.toDomain(movie));
     }
 
     async findById(id:string) {
@@ -51,7 +52,7 @@ export class MovieService{
         if (movieFound==null)
             throw new MovieNotFound(id);
 
-        return movieFound;
+        return MovieMapper.toDomain(movieFound);
     }
 
     async create(movie:Movie) {
@@ -70,23 +71,47 @@ export class MovieService{
                         }
                     })
                 }
+            },
+            select:{
+                uuid: true,
+                title: true,
+                synopsis: true,
+                language: true,
+                year: true,
+                genres:{
+                    select:{
+                        genreName:true,
+                    }
+                },
             }
         });
 
-        return movieCreated;
+        return MovieMapper.toDomain(movieCreated);
     }
 
     async deleteById(id:string) {
         const movieDeleted = await prisma.movie.delete({
             where:{
                 uuid:id
+            },
+            select:{
+                uuid: true,
+                title: true,
+                synopsis: true,
+                language: true,
+                year: true,
+                genres:{
+                    select:{
+                        genreName:true,
+                    }
+                },
             }
         })
 
         if (movieDeleted==null)
             throw new MovieNotFound(id);
 
-        return movieDeleted;
+        return MovieMapper.toDomain(movieDeleted);
     }
 
     async updateById(movie:MovieUpdate) {
@@ -107,13 +132,26 @@ export class MovieService{
                         }
                     })
                 }
+            },
+            select: {
+                uuid: true,
+                title: true,
+                synopsis: true,
+                language: true,
+                year: true,
+                genres:{
+                    select:{
+                        genreName:true,
+                    }
+                },
+                id: false
             }
         })
 
         if (movieUpdated==null)
             throw new MovieNotFound(movie.uuid);
 
-        return movieUpdated;
+        return MovieMapper.toDomain(movieUpdated);
     }
 
     async findByTitle(title: string) {
@@ -139,6 +177,6 @@ export class MovieService{
         if (movieFound==null)
             throw new MovieNotFound(title);
 
-        return movieFound;
+        return MovieMapper.toDomain(movieFound);
     }
 }
