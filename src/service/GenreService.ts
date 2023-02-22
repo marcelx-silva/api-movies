@@ -1,6 +1,7 @@
 import {Genre as GenreInterface} from "../interfaces/Genre";
 import {prisma} from "../database/prisma";
 import {Genre} from "../model/Genre";
+import {GenreMapper} from "../model/mapper/GenreMapper";
 
 export class GenreService{
     async findAll(page:number,limit:number){
@@ -14,7 +15,7 @@ export class GenreService{
             }
         });
 
-        return allGenre;
+        return allGenre.map(genre => GenreMapper.toDomain(genre));
     }
     async findById(uuid:string){
         const genreFound = await prisma.genre.findUnique({
@@ -28,7 +29,10 @@ export class GenreService{
             }
         })
 
-        return genreFound;
+        if (genreFound)
+            return GenreMapper.toDomain(genreFound);
+
+        return null;
     }
     async findByName(name:string){
         const genreFound = await prisma.genre.findUnique({
@@ -41,7 +45,11 @@ export class GenreService{
                 id:false
             }
         })
-        return genreFound;
+
+        if (genreFound)
+            return GenreMapper.toDomain(genreFound);
+
+        return null;
     }
     async deleteById(uuid:string){
         const genreDeleted = await prisma.genre.delete({
@@ -78,6 +86,6 @@ export class GenreService{
             }
         })
 
-        return genreCreated;
+        return GenreMapper.toDomain(genreCreated);
     }
 }
