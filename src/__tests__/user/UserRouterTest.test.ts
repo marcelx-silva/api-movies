@@ -1,7 +1,13 @@
 import request from "supertest";
 import {app} from "../../app";
+import {prisma} from "../../database/prisma";
 
 describe(`User Router`,()=>{
+
+    afterAll(async ()=>{
+        await prisma.$transaction([prisma.user.deleteMany()]);
+    })
+
     it('should create an user', async function () {
         const response = await request(app).post(`/user/auth/register`).send({
             fullName:'Nome Completo',
@@ -21,6 +27,5 @@ describe(`User Router`,()=>{
         })
 
         expect(response.statusType).toBe(2);
-        console.log(response)
     });
 })
