@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Movie{
+  id  Int @id @default(autoincrement())
+  uuid String @db.Uuid @unique
+  title String @db.VarChar(40) @unique
+  synopsis String @db.VarChar(200)
+  language String @db.VarChar(30)
+  year String @db.VarChar(4)
+  genres MovieGenre[]
+}
+
+model Genre{
+  id Int @id @default(autoincrement())
+  uuid String @db.Uuid @unique
+  name String @db.VarChar(35) @unique
+  movies MovieGenre[]
+}
+
+model MovieGenre{
+  movieName String
+  movie Movie @relation(fields: [movieName],references: [title])
+
+  genreName String
+  genre Genre @relation(fields: [genreName],references: [name])
+
+  @@id([movieName,genreName])
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  uuid String @db.Uuid @unique
+  fullName String @db.VarChar(50)
+  username String @db.VarChar(25) @unique
+  email String @db.VarChar(60) @unique
+  password String @db.VarChar(80)
+}
